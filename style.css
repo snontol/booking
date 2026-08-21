@@ -1,0 +1,283 @@
+/* ===========================================================
+   TOKENS — cambia estos valores para adaptar el look a otro
+   restaurante sin tocar el resto del CSS.
+   =========================================================== */
+:root {
+  --ink: #241c18;
+  --ink-soft: #4a3f37;
+  --paper: #f1ecdd;
+  --paper-raised: #fbf8f0;
+  --brass: #c89b3c;
+  --brass-dark: #9c7527;
+  --rust: #b5502c;
+  --line: #d9d0ba;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Work Sans", system-ui, sans-serif;
+
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--ink);
+  font-family: var(--font-body);
+  color: var(--ink);
+  display: flex;
+  justify-content: center;
+  padding: 48px 20px;
+}
+
+/* ===========================================================
+   WIDGET SHELL — pensado como una libreta de reservas de
+   maître: papel cálido sobre fondo oscuro.
+   =========================================================== */
+.booking-widget {
+  width: 100%;
+  max-width: 480px;
+  background: var(--paper);
+  border-radius: 10px;
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+
+.widget-header {
+  padding: 32px 28px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass-dark);
+  font-weight: 600;
+}
+
+.widget-header h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 30px;
+  color: var(--ink);
+}
+
+/* ===========================================================
+   STEP INDICATOR — estilizado como talonario de tickets:
+   separadores punteados tipo "perforación de papel".
+   =========================================================== */
+.step-indicator {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 14px 20px;
+  gap: 0;
+  background: var(--paper-raised);
+  border-bottom: 1px dashed var(--line);
+}
+
+.step-indicator li {
+  flex: 1;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: #b6ab94;
+  padding: 6px 4px;
+  position: relative;
+  text-transform: uppercase;
+}
+
+.step-indicator li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 14px;
+  background: var(--line);
+}
+
+.step-indicator li.active { color: var(--rust); }
+.step-indicator li.done { color: var(--brass-dark); }
+
+/* ===========================================================
+   STEP PANELS
+   =========================================================== */
+.step-stage { padding: 28px; }
+
+.step-panel h2 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 18px;
+  color: var(--ink);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.field input,
+.field textarea {
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+  color: var(--ink);
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: 2px solid var(--brass);
+  outline-offset: 1px;
+  border-color: var(--brass);
+}
+
+.error-text {
+  color: var(--rust);
+  font-size: 13px;
+  min-height: 18px;
+  margin: 4px 0 0;
+}
+
+.hint {
+  color: var(--ink-soft);
+  font-size: 13px;
+  margin: 0;
+}
+
+/* ===========================================================
+   OPTION CARDS (paso Tipo)
+   =========================================================== */
+.option-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option-card {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+.option-card strong { color: var(--ink); font-size: 15px; }
+.option-card span { color: var(--ink-soft); font-size: 13px; }
+
+.option-card.selected {
+  border-color: var(--brass);
+  box-shadow: 0 0 0 1px var(--brass);
+  background: #fff;
+}
+
+/* ===========================================================
+   TIME SLOTS (paso Fecha y hora)
+   =========================================================== */
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.time-slot {
+  padding: 9px 4px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.time-slot:disabled {
+  color: #c8bfa9;
+  text-decoration: line-through;
+  cursor: not-allowed;
+  background: transparent;
+}
+
+.time-slot.selected {
+  background: var(--rust);
+  border-color: var(--rust);
+  color: #fff;
+}
+
+/* ===========================================================
+   BUTTONS
+   =========================================================== */
+.step-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 11px 20px;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--rust);
+  color: #fff;
+}
+
+.btn-primary:hover { background: #9c4023; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  margin-right: auto;
+}
+
+.btn-ghost:hover { background: var(--paper-raised); }
+
+/* ===========================================================
+   CONFIRMATION
+   =========================================================== */
+.summary {
+  list-style: none;
+  margin: 16px 0;
+  padding: 14px 16px;
+  background: var(--paper-raised);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  font-size: 14px;
+}
+
+.summary li { margin-bottom: 6px; }
+.summary li:last-child { margin-bottom: 0; }
+
+/* Respeta preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

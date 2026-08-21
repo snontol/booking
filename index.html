@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reservar mesa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="booking-widget">
+
+  <header class="widget-header">
+    <p class="eyebrow">Libro de reservas</p>
+    <h1 id="restaurant-name">Restaurant</h1>
+  </header>
+
+  <ol id="step-indicator" class="step-indicator"></ol>
+
+  <main class="step-stage">
+
+    <!-- PASO: TIPO (solo se muestra si hay más de 1 tipo configurado) -->
+    <section class="step-panel" data-step="type" hidden>
+      <h2>¿Qué tipo de reserva quieres?</h2>
+      <div id="type-options" class="option-grid"></div>
+      <p class="error-text" id="error-type"></p>
+      <div class="step-actions">
+        <button type="button" class="btn btn-primary" data-next>Siguiente</button>
+      </div>
+    </section>
+
+    <!-- PASO: COMENSALES -->
+    <section class="step-panel" data-step="guests" hidden>
+      <h2>¿Cuántos sois?</h2>
+      <label class="field">
+        <span>Número de comensales</span>
+        <input type="number" id="input-guests" min="1" max="10" placeholder="Ej. 4">
+      </label>
+      <p class="error-text" id="error-guests"></p>
+      <div class="step-actions">
+        <button type="button" class="btn btn-ghost" data-back>Atrás</button>
+        <button type="button" class="btn btn-primary" data-next>Siguiente</button>
+      </div>
+    </section>
+
+    <!-- PASO: FECHA Y HORA -->
+    <section class="step-panel" data-step="datetime" hidden>
+      <h2>Elige fecha y hora</h2>
+      <label class="field">
+        <span>Fecha</span>
+        <input type="date" id="input-date">
+      </label>
+      <div id="time-slots" class="slot-grid">
+        <p class="hint">Elige primero una fecha.</p>
+      </div>
+      <p class="error-text" id="error-datetime"></p>
+      <div class="step-actions">
+        <button type="button" class="btn btn-ghost" data-back>Atrás</button>
+        <button type="button" class="btn btn-primary" data-next>Siguiente</button>
+      </div>
+    </section>
+
+    <!-- PASO: DATOS -->
+    <section class="step-panel" data-step="details" hidden>
+      <h2>Tus datos</h2>
+      <form id="form-details">
+        <label class="field">
+          <span>Nombre</span>
+          <input type="text" id="input-name" autocomplete="name">
+        </label>
+        <label class="field">
+          <span>Email</span>
+          <input type="email" id="input-email" autocomplete="email">
+        </label>
+        <label class="field">
+          <span>Teléfono</span>
+          <input type="tel" id="input-phone" autocomplete="tel">
+        </label>
+        <label class="field">
+          <span>Notas (alergias, ocasión especial…)</span>
+          <textarea id="input-notes" rows="3"></textarea>
+        </label>
+        <p class="error-text" id="error-details"></p>
+        <div class="step-actions">
+          <button type="button" class="btn btn-ghost" data-back>Atrás</button>
+          <button type="submit" class="btn btn-primary">Confirmar reserva</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- PASO: CONFIRMACIÓN -->
+    <section class="step-panel" data-step="confirmation" hidden>
+      <h2>Procesando…</h2>
+    </section>
+
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
