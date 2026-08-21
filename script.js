@@ -36,18 +36,30 @@ let currentStepIndex = 0;
 document.addEventListener("DOMContentLoaded", initWizard);
 
 async function initWizard() {
-  document.getElementById("restaurant-name").textContent = RESTAURANT_CONFIG.name;
+  // A partir de ahora, tanto el nombre del restaurante como los tipos
+  // de reserva vienen del servidor por red. Eso significa que la
+  // petición puede fallar de verdad (servidor caído, sin conexión...),
+  // así que lo envolvemos en try/catch para mostrar algo útil en vez
+  // de que el wizard se quede congelado o rompa en silencio.
+  try {
+    const info = await fetchRestaurantInfo();
+    document.getElementById("restaurant-name").textContent = info.name;
 
-  const types = await fetchBookingTypes();
+    const types = await fetchBookingTypes();
 
-  if (types.length > 1) {
-    // Solo mostramos el paso de "Tipo" si hay algo real que elegir.
-    STEPS = ["type", ...BASE_STEPS];
-    renderTypeOptions(types);
-  } else {
-    // Un único tipo: lo asignamos automáticamente y nos lo saltamos.
-    bookingState.type = types[0]?.id ?? "standard";
-    STEPS = [...BASE_STEPS];
+    if (types.length > 1) {
+      // Solo mostramos el paso de "Tipo" si hay algo real que elegir.
+      STEPS = ["type", ...BASE_STEPS];
+      renderTypeOptions(types);
+    } else {
+      // Un único tipo: lo asignamos automáticamente y nos lo saltamos.
+      bookingState.type = types[0]?.id ?? "standard";
+      STEPS = [...BASE_STEPS];
+    }
+  } catch (err) {
+    document.querySelector(".step-stage").innerHTML =
+      `<p class="error-text">No se pudo conectar con el servidor. ¿Está arrancado en ${API_BASE_URL}?</p>`;
+    return;
   }
 
   buildStepIndicator();
@@ -268,17 +280,28 @@ async function finalizeBooking() {
   const panel = document.querySelector('[data-step="confirmation"]');
   panel.innerHTML = `<p class="hint">Confirmando tu reserva…</p>`;
 
-  const result = await submitBooking(bookingState);
+  try {
+    const result = await submitBooking(bookingState);
 
-  panel.innerHTML = `
-    <h2>¡Reserva confirmada!</h2>
-    <p>Código de confirmación: <strong>${result.confirmationCode}</strong></p>
-    <ul class="summary">
-      <li><strong>Comensales:</strong> ${bookingState.guests}</li>
-      <li><strong>Fecha:</strong> ${bookingState.date}</li>
-      <li><strong>Hora:</strong> ${bookingState.time}</li>
-      <li><strong>Nombre:</strong> ${bookingState.customer.name}</li>
-    </ul>
-    <p class="hint">Te hemos enviado los detalles a ${bookingState.customer.email}.</p>
-  `;
+    panel.innerHTML = `
+      <h2>¡Reserva confirmada!</h2>
+      <p>Código de confirmación: <strong>${result.confirmationCode}</strong></p>
+      <ul class="summary">
+        <li><strong>Comensales:</strong> ${bookingState.guests}</li>
+        <li><strong>Fecha:</strong> ${bookingState.date}</li>
+        <li><strong>Hora:</strong> ${bookingState.time}</li>
+        <li><strong>Nombre:</strong> ${bookingState.customer.name}</li>
+      </ul>
+      <p class="hint">Te hemos enviado los detalles a ${bookingState.customer.email}.</p>
+    `;
+  } catch (err) {
+    // Ej: alguien reservó la misma franja un segundo antes que tú.
+    panel.innerHTML = `
+      <h2>No se pudo confirmar</h2>
+      <p class="error-text">${err.message}</p>
+      <button type="button" class="btn btn-primary" onclick="goToStep(STEPS.indexOf('datetime'))">
+        Elegir otra hora
+      </button>
+    `;
+  }
 }

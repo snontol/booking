@@ -1,0 +1,15 @@
+{
+  "name": "booking-widget-server",
+  "version": "1.0.0",
+  "description": "Backend del widget de reservas — Fase 2: servidor Node.js + Express con datos en memoria (sin base de datos todavía).",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
+  }
+}
